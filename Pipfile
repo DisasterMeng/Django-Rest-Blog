@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+markdown = "*"
+django-filter = "*"
+django-model-utils = "*"
+pyyaml = "*"
+django-mptt = "*"
+coreapi = "*"
+django-cors-headers = "*"
+pillow = "*"
+six = "*"
+qiniu = "*"
+djangorestframework-jwt = "*"
+django-contrib-comments = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
