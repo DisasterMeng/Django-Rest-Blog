@@ -144,7 +144,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 UPLOAD_SUMMARY_DIR = 'static/images/summary'
 UPLOAD_FRIEND_DIR = 'static/images/friend'
-UPLOAD_USER_DIR = 'static/images/friend'
+UPLOAD_USER_DIR = 'static/images/user'
 
 # django-rest-framework settings
 REST_FRAMEWORK = {
@@ -215,3 +215,8 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=60 * 60 * 24 * 7),  # 过期时间
     'JWT_AUTH_HEADER_PREFIX': 'BLOG',  # 请求头前缀
 }
+
+
+
+# 简书主页
+JS_HOME = 'https://www.jianshu.com/u/debdd7d8eb03'

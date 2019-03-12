@@ -18,6 +18,7 @@ six = "*"
 qiniu = "*"
 djangorestframework-jwt = "*"
 django-contrib-comments = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 
