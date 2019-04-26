@@ -3,7 +3,6 @@ from django.db import models
 
 # Create your models here.
 from django_comments.abstracts import CommentAbstractModel
-from model_utils.models import TimeStampedModel
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
@@ -11,7 +10,8 @@ from mptt.models import MPTTModel
 class Comment(MPTTModel, CommentAbstractModel):
     parent = TreeForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='上级回复',
                             related_name='children')
-
+    user_agent = models.CharField('user-agent', max_length=300, default='')
+    ip_position = models.CharField('ip position', max_length=100, default='')
 
     def descendants(self):
         """

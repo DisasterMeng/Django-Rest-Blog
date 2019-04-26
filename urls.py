@@ -15,7 +15,6 @@ Including another URLconf
 """
 
 
-
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
@@ -23,26 +22,30 @@ from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
 
-from blog.views import CategoryViewSet,BlogViewSet,TagViewSet
-from friend.views import FriendViewSet
-from about.views import AboutViewSet
-from summary.views import SummaryViewSet
-from third_auth.views import ThirdAuthViewSet
 from user.views import UserViewSet
+from about.views import AboutViewSet
+from friend.views import FriendViewSet
+from live2d.views import Live2dViewSet
+from notice.views import NoticeViewSet
+from summary.views import SummaryViewSet
 from comment.views import CommentViewSet
+from third_auth.views import ThirdAuthViewSet
+from blog.views import CategoryViewSet, BlogViewSet, TagViewSet
 
 
 router = DefaultRouter()
 
-router.register(r'categorys', CategoryViewSet)
-router.register(r'blogs', BlogViewSet)
-router.register(r'friends', FriendViewSet)
-router.register(r'about', AboutViewSet)
-router.register(r'summarys', SummaryViewSet)
 router.register(r'tags', TagViewSet)
-router.register(r'oauth',ThirdAuthViewSet,base_name='oauth')
-router.register(r'user',UserViewSet,base_name='user')
-router.register(r'comments',CommentViewSet)
+router.register(r'blogs', BlogViewSet)
+router.register(r'about', AboutViewSet)
+router.register(r'live2d', Live2dViewSet)
+router.register(r'notice', NoticeViewSet)
+router.register(r'friends', FriendViewSet)
+router.register(r'summarys', SummaryViewSet)
+router.register(r'comments', CommentViewSet)
+router.register(r'categorys', CategoryViewSet)
+router.register(r'user', UserViewSet, base_name='user')
+router.register(r'oauth', ThirdAuthViewSet, base_name='oauth')
 
 urlpatterns = [
     path('api/admin/', admin.site.urls),

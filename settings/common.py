@@ -16,7 +16,6 @@ import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
@@ -56,12 +55,15 @@ INSTALLED_APPS = [
 
     # my apps
     'blog.apps.BlogConfig',
+    'live2d.apps.Live2DConfig',
     'friend.apps.FriendConfig',
+    'notice.apps.NoticeConfig',
     'about.apps.AboutConfig',
     'summary.apps.SummaryConfig',
     'third_auth.apps.ThirdAuthConfig',
     'user.apps.UserConfig',
-    'comment.apps.CommentConfig'
+    'comment.apps.CommentConfig',
+    'qq_wry.apps.QqWryConfig'
 ]
 
 MIDDLEWARE = [
@@ -145,6 +147,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 UPLOAD_SUMMARY_DIR = 'static/images/summary'
 UPLOAD_FRIEND_DIR = 'static/images/friend'
 UPLOAD_USER_DIR = 'static/images/user'
+UPLOAD_LIVE2D_DIR = 'static/live2d'
+UPLOAD_QQWRY_DIR = 'static/qqwry'
 
 # django-rest-framework settings
 REST_FRAMEWORK = {

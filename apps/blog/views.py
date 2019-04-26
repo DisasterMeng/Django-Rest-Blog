@@ -1,4 +1,6 @@
-from rest_framework import viewsets, permissions
+import markdown
+from markdown.inlinepatterns import SimpleTagPattern
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -7,6 +9,7 @@ from utils.pagination import StandardResultsSetPagination
 from .models import Category, Blog, Tag
 from .serializers import CategorySerializer, BlogSerializer, BlogListSerializer, BlogDetailSerializer, TagSerializer
 
+INS_RE = r"(\+\+)(.+?)(\+\+)"
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -54,3 +57,11 @@ class BlogViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = TreeCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
+
+    @action(methods=['get'], detail=False, url_path='md-to-html')
+    def md_to_html(self, request, pk=None):
+        content = request.query_params.get('content', '')
+        md = markdown.Markdown(extensions=['utils.markdown_extension:ChangeCodeExtension',
+                                           'pymdownx.extra', 'pymdownx.critic', 'pymdownx.tilde'])
+        md.inlinePatterns.add('ins', SimpleTagPattern(INS_RE, 'ins'), '<not_strong')
+        return Response(md.convert(content), status=status.HTTP_200_OK)

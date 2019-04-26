@@ -4,6 +4,7 @@ from django.db.models import Prefetch
 from rest_framework import serializers
 
 from blog.models import Blog
+from user.models import User
 from user.serializers import SimpleUserSerializer
 from utils.mixins import EagerLoaderMixin
 from .models import Comment
@@ -26,21 +27,17 @@ class FlatCommentSerializer(serializers.ModelSerializer):
         }
 
     def get_user(self, obj):
-        user = obj.user
-        return {
-            'id': user.id,
-            'username': user.username,
-        }
+        user = User.objects.get(pk=obj.user.id)
+        serializer = SimpleUserSerializer(user, many=False, context={'request': self.context['request']})
+        return serializer.data
 
     def get_parent_user(self, obj):
         parent = obj.parent
         if not parent:
             return None
-        user = parent.user
-        return {
-            'id': user.id,
-            'username': user.username,
-        }
+        parent_user = User.objects.get(pk=parent.user.id)
+        serializer = SimpleUserSerializer(parent_user, many=False, context={'request': self.context['request']})
+        return serializer.data
 
     class Meta:
         model = Comment
@@ -88,6 +85,8 @@ class TreeCommentSerializer(serializers.ModelSerializer, EagerLoaderMixin):
             'descendants_count',
             'is_add',
             'sub_content',
+            'user_agent',
+            'ip_position'
         )
 
 
@@ -102,18 +101,14 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         parent = obj.parent
         if not parent:
             return None
-        user = parent.user
-        return {
-            'id': user.id,
-            'username': user.username,
-        }
+        parent_user = User.objects.get(pk=parent.user.id)
+        serializer = SimpleUserSerializer(parent_user, many=False, context={'request': self.context['request']})
+        return serializer.data
 
     def get_user(self, obj):
-        user = obj.user
-        return {
-            'id': user.id,
-            'username': user.username
-        }
+        user = User.objects.get(pk=obj.user.id)
+        serializer = SimpleUserSerializer(user, many=False, context={'request': self.context['request']})
+        return serializer.data
 
     def create(self, validated_data):
         reivew_id = validated_data.get('object_pk')
@@ -139,6 +134,8 @@ class CommentCreateSerializer(serializers.ModelSerializer):
             'is_removed',
             'user',
             'parent_user',
+            'user_agent',
+            'ip_position'
         )
         read_only_fields = (
             'id',
@@ -146,4 +143,6 @@ class CommentCreateSerializer(serializers.ModelSerializer):
             'ip_address',
             'is_public',
             'is_removed',
+            'user_agent',
+            'ip_position'
         )

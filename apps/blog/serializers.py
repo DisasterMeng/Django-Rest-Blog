@@ -1,9 +1,12 @@
+import markdown
+from markdown.inlinepatterns import SimpleTagPattern
+
 from django.utils.html import strip_tags
 from rest_framework import serializers
-import markdown
 
-from utils.markdown_extension import DelInsExtension
 from .models import Blog, Category, Tag
+
+INS_RE = r"(\+\+)(.+?)(\+\+)"
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -29,13 +32,11 @@ class TagSerializer(serializers.ModelSerializer):
         serializer = BlogSimpleSerializer(obj.blog_set.all(), many=True)
         return serializer.data
 
+
 class TagSimpleSerializer(serializers.ModelSerializer):
-
-
     class Meta:
         model = Tag
         fields = ('id', 'name')
-
 
 
 class BlogSerializer(serializers.ModelSerializer):
@@ -63,7 +64,9 @@ class BlogDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_content(self, obj):
-        md = markdown.Markdown(extensions=['markdown.extensions.extra', 'markdown.extensions.codehilite',DelInsExtension()])
+        md = markdown.Markdown(extensions=['utils.markdown_extension:ChangeCodeExtension',
+                                           'pymdownx.extra', 'pymdownx.critic', 'pymdownx.tilde'])
+        md.inlinePatterns.add('ins', SimpleTagPattern(INS_RE, 'ins'), '<not_strong')
         return md.convert(obj.content)
 
     def get_created(self, obj):
@@ -110,7 +113,9 @@ class BlogListSerializer(serializers.ModelSerializer):
         fields = ('id', 'created', 'desc', 'title', 'category', 'page_view', 'summary_img', 'tags')
 
     def get_desc(self, obj):
-        md = markdown.Markdown(extensions=['markdown.extensions.extra', 'markdown.extensions.codehilite'])
+        md = markdown.Markdown(extensions=['utils.markdown_extension:ChangeCodeExtension',
+                                           'pymdownx.extra', 'pymdownx.critic', 'pymdownx.tilde'])
+        md.inlinePatterns.add('ins', SimpleTagPattern(INS_RE, 'ins'), '<not_strong')
         desc = strip_tags(md.convert(obj.content))[:54]
         return '{}...'.format(desc)
 

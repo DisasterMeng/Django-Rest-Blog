@@ -1,19 +1,18 @@
 from rest_framework.renderers import JSONRenderer
 
 
-
-
 def get_msg(code):
-    msgMap = {
-        "200":u"请求成功",
-        "403":u"认证失败",
-
+    msg_map = {
+        "200": u"请求成功",
+        "403": u"认证失败",
+        '201': '请求成功并且服务器创建了新的资源'
     }
 
-    if str(code) in msgMap.keys():
-        return msgMap[str(code)]
+    if str(code) in msg_map.keys():
+        return msg_map[str(code)]
     else:
         return "未知错误"
+
 
 class CustomJsonRenderer(JSONRenderer):
     charset = 'utf-8'
@@ -27,7 +26,6 @@ class CustomJsonRenderer(JSONRenderer):
             'data':{返回数据}
         }
         """
-        print()
         if renderer_context:
             if isinstance(data, dict):
                 # 如果没有就创建一个

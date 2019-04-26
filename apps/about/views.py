@@ -9,6 +9,6 @@ class AboutViewSet(viewsets.GenericViewSet):
     queryset = About.objects.all()
 
     def list(self, request, *args, **kwargs):
-        about = About.objects.all().first()
+        about = About.objects.last()
         serializer = AboutSerializer(about)
         return Response(serializer.data)
