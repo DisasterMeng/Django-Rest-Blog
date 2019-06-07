@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 
 from user.views import UserViewSet
 from about.views import AboutViewSet
+from music.views import MusicViewSet
 from friend.views import FriendViewSet
 from live2d.views import Live2dViewSet
 from notice.views import NoticeViewSet
@@ -38,6 +39,7 @@ router = DefaultRouter()
 router.register(r'tags', TagViewSet)
 router.register(r'blogs', BlogViewSet)
 router.register(r'about', AboutViewSet)
+router.register(r'music', MusicViewSet)
 router.register(r'live2d', Live2dViewSet)
 router.register(r'notice', NoticeViewSet)
 router.register(r'friends', FriendViewSet)

@@ -18,14 +18,13 @@ class SummaryViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=False, url_path='random')
     def random_summary(self, request, pk=None):
         sum_tag = None
-        if 'sum_tag' in request.COOKIES:
-            sum_tag = request.COOKIES['sum_tag']
+        if 'sum_tag' in request.session:
+            sum_tag = request.session.get('sum_tag')
         summary = Summary.objects.order_by('?')
         img = summary.first()
         cur_md5 = md5(img.image.read())
         if sum_tag and sum_tag == cur_md5:
             img = summary.last()
             cur_md5 = md5(img.image.read())
-        res = HttpResponse(img.image, content_type='image/png')
-        res.set_cookie('sum_tag', cur_md5)
-        return res
+        request.session['sum_tag'] = cur_md5
+        return HttpResponse(img.image, content_type='image/png')

@@ -5,7 +5,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import SimpleUserSerializer
-from .models import User
 from utils.cookie_authentication import CookieAuthentication
 
 
@@ -22,5 +21,5 @@ class UserViewSet(viewsets.GenericViewSet):
         :return:
         """
         if request.user.is_authenticated:
-            serializer = SimpleUserSerializer(request.user,context={'request': request})
+            serializer = SimpleUserSerializer(request.user, context={'request': request})
             return Response(serializer.data)

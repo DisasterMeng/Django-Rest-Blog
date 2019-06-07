@@ -48,7 +48,7 @@ class BlogSerializer(serializers.ModelSerializer):
 class BlogSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'summary_img')
 
 
 class BlogDetailSerializer(serializers.ModelSerializer):
@@ -83,10 +83,8 @@ class BlogDetailSerializer(serializers.ModelSerializer):
         blogs = Blog.objects.order_by('-id')
         pre_blog = blogs.filter(id__lt=obj.id)
         if pre_blog.count() > 0:
-            return {
-                'title': pre_blog[0].title,
-                'id': pre_blog[0].id
-            }
+            serializer = BlogSimpleSerializer(pre_blog[0], many=False, context={'request': self.context['request']})
+            return serializer.data
         else:
             return None
 
@@ -94,10 +92,8 @@ class BlogDetailSerializer(serializers.ModelSerializer):
         blogs = Blog.objects.order_by('-id')
         next_blog = blogs.filter(id__gt=obj.id).order_by('id')
         if next_blog.count() > 0:
-            return {
-                'title': next_blog[0].title,
-                'id': next_blog[0].id
-            }
+            serializer = BlogSimpleSerializer(next_blog[0], many=False, context={'request': self.context['request']})
+            return serializer.data
         else:
             return None
 

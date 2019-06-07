@@ -34,12 +34,18 @@ class ThirdAuthViewSet(viewsets.GenericViewSet):
 
     @action(methods=['get'], detail=False, url_path='github-auth')
     def github_auth(self, request, pk=None):
-        oauth, nickname, image_url, signature, sex, open_id = self.get_user_info()
+        oauth, nickname, image_url, signature, sex, open_id, email, github_url = self.get_user_info()
         if oauth:
             user = oauth.user
             return self.custom_response(user)
         else:
-            user = User.objects.create(username=nickname, desc=signature, password=uuid.uuid1(), sex=sex)
+            super_user = User.objects.filter(is_superuser=True).first()
+            is_super = False
+            if super_user.email == email:
+                is_super = True
+            user = User.objects.create(username=nickname, desc=signature,
+                                       password=uuid.uuid1(), sex=sex,
+                                       github=github_url, email=email, is_superuser=is_super)
             user.img_download(image_url, nickname)
             user.save()
 
@@ -55,6 +61,8 @@ class ThirdAuthViewSet(viewsets.GenericViewSet):
         auth = AuthGithub(settings.GITHUB_APP_ID, settings.GITHUB_KEY, settings.GITHUB_CALLBACK_URL)
         auth.get_access_token(code)
         user_info = auth.get_user_info()
+        email = user_info.get('email', '')
+        github_url = user_info.get('html_url', '')
         nickname = user_info.get('login', '')
         image_url = user_info.get('avatar_url', '')
         open_id = str(auth.openid)
@@ -66,8 +74,9 @@ class ThirdAuthViewSet(viewsets.GenericViewSet):
         try:
             oauth = ThirdAuth.objects.get(openid=open_id, type='1')
         except BaseException as e:
+            print(e)
             oauth = None
-        return oauth, nickname, image_url, signature, sex, open_id
+        return oauth, nickname, image_url, signature, sex, open_id, email, github_url
 
     def custom_response(self, user):
         if user is not None and user.is_active:

@@ -11,6 +11,7 @@ from .serializers import CategorySerializer, BlogSerializer, BlogListSerializer,
 
 INS_RE = r"(\+\+)(.+?)(\+\+)"
 
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

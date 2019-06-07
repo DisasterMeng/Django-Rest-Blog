@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     'third_auth.apps.ThirdAuthConfig',
     'user.apps.UserConfig',
     'comment.apps.CommentConfig',
-    'qq_wry.apps.QqWryConfig'
+    'qq_wry.apps.QqWryConfig',
+    'music.apps.MusicConfig'
 ]
 
 MIDDLEWARE = [
@@ -149,6 +150,7 @@ UPLOAD_FRIEND_DIR = 'static/images/friend'
 UPLOAD_USER_DIR = 'static/images/user'
 UPLOAD_LIVE2D_DIR = 'static/live2d'
 UPLOAD_QQWRY_DIR = 'static/qqwry'
+UPLOAD_MUSIC_DIR = 'static/music'
 
 # django-rest-framework settings
 REST_FRAMEWORK = {
