@@ -16,7 +16,8 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
-    def get_blogs(self, obj):
+    @staticmethod
+    def get_blogs(obj):
         serializer = BlogSimpleSerializer(obj.blog_set.all(), many=True)
         return serializer.data
 
@@ -28,7 +29,8 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ('id', 'name', 'blogs')
 
-    def get_blogs(self, obj):
+    @staticmethod
+    def get_blogs(obj):
         serializer = BlogSimpleSerializer(obj.blog_set.all(), many=True)
         return serializer.data
 
@@ -63,19 +65,23 @@ class BlogDetailSerializer(serializers.ModelSerializer):
         model = Blog
         fields = "__all__"
 
-    def get_content(self, obj):
+    @staticmethod
+    def get_content(obj):
         md = markdown.Markdown(extensions=['utils.markdown_extension:ChangeCodeExtension',
                                            'pymdownx.extra', 'pymdownx.critic', 'pymdownx.tilde'])
         md.inlinePatterns.add('ins', SimpleTagPattern(INS_RE, 'ins'), '<not_strong')
         return md.convert(obj.content)
 
-    def get_created(self, obj):
+    @staticmethod
+    def get_created(obj):
         return obj.created.strftime('%Y-%m-%d')
 
-    def get_category(self, obj):
+    @staticmethod
+    def get_category(obj):
         return obj.category.name
 
-    def get_tags(self, obj):
+    @staticmethod
+    def get_tags(obj):
         serializer = TagSimpleSerializer(obj.tags, many=True)
         return serializer.data
 
@@ -108,19 +114,23 @@ class BlogListSerializer(serializers.ModelSerializer):
         model = Blog
         fields = ('id', 'created', 'desc', 'title', 'category', 'page_view', 'summary_img', 'tags')
 
-    def get_desc(self, obj):
+    @staticmethod
+    def get_desc(obj):
         md = markdown.Markdown(extensions=['utils.markdown_extension:ChangeCodeExtension',
                                            'pymdownx.extra', 'pymdownx.critic', 'pymdownx.tilde'])
         md.inlinePatterns.add('ins', SimpleTagPattern(INS_RE, 'ins'), '<not_strong')
         desc = strip_tags(md.convert(obj.content))[:54]
         return '{}...'.format(desc)
 
-    def get_created(self, obj):
+    @staticmethod
+    def get_created(obj):
         return obj.created.strftime('%Y-%m-%d')
 
-    def get_category(self, obj):
+    @staticmethod
+    def get_category(obj):
         return obj.category.name
 
-    def get_tags(self, obj):
+    @staticmethod
+    def get_tags(obj):
         serializer = TagSimpleSerializer(obj.tags, many=True)
         return serializer.data

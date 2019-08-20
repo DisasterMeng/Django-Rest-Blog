@@ -1,16 +1,14 @@
 import uuid
 
-from django.shortcuts import render
-
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from rest_framework.decorators import action
 from rest_framework import viewsets, status
 
+from user.models import User
 from third_auth.models import ThirdAuth
 from third_auth.serializers import ThirdAuthSerializer
 from third_auth.utils.auth_github import AuthGithub
-from user.models import User
 from utils.jwt import generate_token, generate_response
 
 
@@ -27,7 +25,6 @@ class ThirdAuthViewSet(viewsets.GenericViewSet):
         """
         if 'current' in request.query_params:
             request.session['current'] = request.query_params.get('current')
-
         auth = AuthGithub(settings.GITHUB_APP_ID, settings.GITHUB_KEY, settings.GITHUB_CALLBACK_URL)
         url = auth.get_auth_url()
         return HttpResponseRedirect(url)
@@ -40,15 +37,12 @@ class ThirdAuthViewSet(viewsets.GenericViewSet):
             return self.custom_response(user)
         else:
             super_user = User.objects.filter(is_superuser=True).first()
-            is_super = False
-            if super_user.email == email:
-                is_super = True
+            is_super = True if super_user.email == email else False
             user = User.objects.create(username=nickname, desc=signature,
                                        password=uuid.uuid1(), sex=sex,
                                        github=github_url, email=email, is_superuser=is_super)
             user.img_download(image_url, nickname)
             user.save()
-
             instance = ThirdAuth.objects.create(user=user, openid=open_id, type='1')
             instance.save()
             return self.custom_response(user)
@@ -70,7 +64,6 @@ class ThirdAuthViewSet(viewsets.GenericViewSet):
         if not signature:
             signature = "无个性签名"
         sex = '3'
-
         try:
             oauth = ThirdAuth.objects.get(openid=open_id, type='1')
         except BaseException as e:

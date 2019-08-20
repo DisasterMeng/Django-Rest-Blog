@@ -7,5 +7,6 @@ from rest_framework_jwt.authentication import BaseJSONWebTokenAuthentication
 
 class CookieAuthentication(BaseJSONWebTokenAuthentication):
 
-    def get_jwt_value(self, request):
+    @staticmethod
+    def get_jwt_value(request):
         return request.COOKIES.get(api_settings.JWT_AUTH_HEADER_PREFIX.upper(), '')

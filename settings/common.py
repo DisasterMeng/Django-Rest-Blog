@@ -156,7 +156,6 @@ UPLOAD_MUSIC_DIR = 'static/music'
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'utils.render_response.CustomJsonRenderer',
-
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',

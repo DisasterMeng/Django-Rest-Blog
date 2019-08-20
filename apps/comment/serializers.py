@@ -16,10 +16,12 @@ class FlatCommentSerializer(serializers.ModelSerializer):
     parent_user = serializers.SerializerMethodField()
     submit_date = serializers.SerializerMethodField()
 
-    def get_submit_date(self, obj):
-        return obj.submit_date.strftime('%Y-%m-%d')
+    @staticmethod
+    def get_submit_date(obj):
+        return obj.submit_date.strftime('%Y-%m-%d %H:%M:%S')
 
-    def get_review(self, obj):
+    @staticmethod
+    def get_review(obj):
         review = obj.content_object
         return {
             'id': review.id,
@@ -44,6 +46,9 @@ class FlatCommentSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'user',
+            'ip_address',
+            'ip_position',
+            'user_agent',
             'parent_user',
             'review',
             'submit_date',
@@ -59,13 +64,16 @@ class TreeCommentSerializer(serializers.ModelSerializer, EagerLoaderMixin):
     is_add = serializers.SerializerMethodField()
     sub_content = serializers.SerializerMethodField()
 
-    def get_submit_date(self, obj):
-        return obj.submit_date.strftime('%Y-%m-%d')
+    @staticmethod
+    def get_submit_date(obj):
+        return obj.submit_date.strftime('%Y-%m-%d %H:%M:%S')
 
-    def get_is_add(self, obj):
+    @staticmethod
+    def get_is_add(obj):
         return False
 
-    def get_sub_content(self, obj):
+    @staticmethod
+    def get_sub_content(obj):
         return ''
 
     PREFETCH_RELATED_FIELDS = [
@@ -86,6 +94,7 @@ class TreeCommentSerializer(serializers.ModelSerializer, EagerLoaderMixin):
             'is_add',
             'sub_content',
             'user_agent',
+            'ip_address',
             'ip_position'
         )
 

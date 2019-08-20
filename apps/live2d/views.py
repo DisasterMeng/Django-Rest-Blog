@@ -21,7 +21,6 @@ class Live2dViewSet(viewsets.ModelViewSet):
         live_tag = None
         if 'live_tag' in request.session:
             live_tag = request.session.get('live_tag')
-        print(live_tag)
         live2d = Live2dTextures.objects.order_by('?')
         img = live2d.first()
         cur_md5 = md5(img.textures.read())

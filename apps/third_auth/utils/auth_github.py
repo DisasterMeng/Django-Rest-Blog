@@ -5,6 +5,11 @@ from .auth_base import AuthBase
 
 
 class AuthGithub(AuthBase):
+    def __init__(self, *args, **kwargs):
+        self.access_token = ''
+        self.openid = ''
+        super(AuthGithub, self).__init__(*args, **kwargs)
+
     def get_auth_url(self):
         params = {
             'client_id': self.id,
