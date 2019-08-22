@@ -1,7 +1,5 @@
 from .common import *
 
-SECRET_KEY = 'xxxx'
-
 DEBUG = False
 ALLOWED_HOSTS = ['.yandingblog.cn','localhost','127.0.0.1','0.0.0.0']
 

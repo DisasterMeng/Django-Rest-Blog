@@ -10,7 +10,10 @@ from .models import Comment
 from .serializers import CommentCreateSerializer
 
 INS_RE = r"(\+\+)(.+?)(\+\+)"
-QQ_WRY = Wry()
+try:
+    QQ_WRY = Wry()
+except Exception as e:
+    pass
 
 
 class CommentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):

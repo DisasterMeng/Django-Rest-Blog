@@ -110,4 +110,6 @@ venv.bak/
 .idea
 .idea/inspectionProfiles/**
 
+.vscode
+
 Pipfile.lock

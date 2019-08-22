@@ -28,7 +28,6 @@ try:
     register_events(scheduler)
     scheduler.start()
 except Exception as e:
-    print(e)
     # 有错误就停止定时器
     scheduler.shutdown()
 
