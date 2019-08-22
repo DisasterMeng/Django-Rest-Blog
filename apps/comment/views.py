@@ -4,13 +4,13 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from tasks.qq_wry import Wry
 from utils.cookie_authentication import CookieAuthentication
 from .models import Comment
 from .serializers import CommentCreateSerializer
 
 INS_RE = r"(\+\+)(.+?)(\+\+)"
 try:
+    from tasks.qq_wry import Wry
     QQ_WRY = Wry()
 except Exception as e:
     pass
