@@ -6,9 +6,6 @@ from utils.uuid import md5
 from utils.qqwry import QQwry
 from utils.cz88update import updateQQwry
 
-from apscheduler.schedulers.background import BackgroundScheduler
-from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.dev')
 django.setup()
 
@@ -16,6 +13,9 @@ from qq_wry.models import QqWry
 
 
 try:
+    from apscheduler.schedulers.background import BackgroundScheduler
+    from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
+
     scheduler = BackgroundScheduler()
     scheduler.add_jobstore(DjangoJobStore(), "default")
 
@@ -29,7 +29,8 @@ try:
     scheduler.start()
 except Exception as e:
     # 有错误就停止定时器
-    scheduler.shutdown()
+    # scheduler.shutdown()
+    pass
 
 
 # 单例装饰器
