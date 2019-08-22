@@ -14,7 +14,8 @@ class AboutSerializer(serializers.ModelSerializer):
         model = About
         fields = '__all__'
 
-    def get_content(self, obj):
+    @staticmethod
+    def get_content(obj):
         md = markdown.Markdown(extensions=['utils.markdown_extension:ChangeCodeExtension',
                                            'pymdownx.extra', 'pymdownx.critic', 'pymdownx.tilde'])
         md.inlinePatterns.add('ins', SimpleTagPattern(INS_RE, 'ins'), '<not_strong')

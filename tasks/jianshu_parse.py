@@ -6,11 +6,6 @@ from bs4 import BeautifulSoup
 from tasks.tomd import Tomd
 
 
-# print(res.text)
-
-
-
-
 def parse_jianshu(text):
     soup = BeautifulSoup(text, 'html.parser')
 
@@ -31,11 +26,11 @@ def parse_jianshu(text):
     category = soup.select_one('.notebook span').string
 
     return {
-        'content':content,
-        'title':title,
-        'date':date,
-        'views':views,
-        'category':category
+        'content': content,
+        'title': title,
+        'date': date,
+        'views': views,
+        'category': category
 
     }
 
@@ -49,8 +44,6 @@ if __name__ == '__main__':
     url = 'https://www.jianshu.com/p/e822329a0137'
 
     res = requests.get(url=url, headers=headers)
-
-
 
     option = parse_jianshu(res.text)
     print(option)

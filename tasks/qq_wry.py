@@ -1,12 +1,13 @@
 import os
-import time
 import django
-import schedule
-import threading
+from functools import wraps
 
 from utils.uuid import md5
 from utils.qqwry import QQwry
 from utils.cz88update import updateQQwry
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.dev')
 django.setup()
@@ -14,6 +15,38 @@ django.setup()
 from qq_wry.models import QqWry
 
 
+try:
+    scheduler = BackgroundScheduler()
+    scheduler.add_jobstore(DjangoJobStore(), "default")
+
+    # 每天早上 9 点 更新qq_wry数据库
+    @register_job(scheduler, 'cron', day_of_week='mon-fri', hour='9', minute='00', second='00')
+    def run():
+        wry = Wry()
+        wry.task()
+
+    register_events(scheduler)
+    scheduler.start()
+except Exception as e:
+    print(e)
+    # 有错误就停止定时器
+    scheduler.shutdown()
+
+
+# 单例装饰器
+def singleton(cls):
+    instances = {}
+
+    @wraps(cls)
+    def get_instance(*args, **kwargs):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kwargs)
+        return instances[cls]
+
+    return get_instance
+
+
+@singleton
 class Wry:
     def __init__(self):
         self.wry = QqWry.objects.first()
@@ -40,7 +73,8 @@ class Wry:
     def clear(self):
         self.q.clear()
 
-    def update(self):
+    @staticmethod
+    def update():
         res = updateQQwry()
         if type(res) == int:
             raise Exception('qqwry update fail')
@@ -49,6 +83,7 @@ class Wry:
     def task(self):
         # 比较md5 来决定是否更新
         try:
+            print('开始更新qq_wry')
             cur_md5 = md5(self.wry.qqwry_file.read())
             wry_binary = self.update()
             up_md5 = md5(wry_binary)
@@ -61,18 +96,8 @@ class Wry:
                 print('更新之后版本----- %s' % str(self.get_version()))
             else:
                 print('暂无更新')
-        except Exception:
-            print('qqwry task error')
-
-    def run_threaded(self, func):
-        threading.Thread(target=func).start()
-        return schedule.CancelJob
-
-    def run(self):
-        schedule.every().day.at('09:00').do(self.run_threaded, self.task)
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':
@@ -80,4 +105,3 @@ if __name__ == '__main__':
     print(qq_wry.ip_search('127.0.0.1'))
     print(qq_wry.get_version())
     qq_wry.task()
-    # qq_wry.task()

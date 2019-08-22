@@ -1,7 +1,5 @@
-
 from rest_framework import serializers
 
 
-class ThirdAuthSerializer(serializers.Serializer):
-
+class ThirdAuthSerializer(serializers.ModelSerializer):
     token = serializers.CharField()

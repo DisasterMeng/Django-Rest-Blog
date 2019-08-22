@@ -4,9 +4,9 @@ from django.conf import settings
 
 
 class Friend(TimeStampedModel):
-    name = models.CharField('友人帐',max_length=50)
-    desc = models.CharField('描述',max_length=200)
-    image = models.ImageField('图片',upload_to=settings.UPLOAD_FRIEND_DIR,default=0)
+    name = models.CharField('友人帐', max_length=50)
+    desc = models.CharField('描述', max_length=200)
+    image = models.ImageField('图片', upload_to=settings.UPLOAD_FRIEND_DIR, default=0)
     link = models.URLField('连接')
 
     class Meta:

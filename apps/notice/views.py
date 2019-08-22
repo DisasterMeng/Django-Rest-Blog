@@ -9,7 +9,8 @@ from .serializers import NoticeSerializer
 class NoticeViewSet(viewsets.GenericViewSet):
     queryset = Notice.objects.all()
 
-    def list(self, request, *args, **kwargs):
+    @staticmethod
+    def list(request, *args, **kwargs):
         notice = Notice.objects.last()
         serializer = NoticeSerializer(notice)
         return Response(serializer.data)

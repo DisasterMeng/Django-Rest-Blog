@@ -20,7 +20,7 @@ djangorestframework-jwt = "*"
 django-contrib-comments = "*"
 beautifulsoup4 = "*"
 pymdown-extensions = "*"
-schedule = "*"
+django-apscheduler = "*"
 
 [dev-packages]
 

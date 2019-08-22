@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'django_apscheduler',
 
     # my apps
     'blog.apps.BlogConfig',
@@ -165,6 +166,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'utils.cookie_authentication.CookieAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.AutoSchema',
     # 'DEFAULT_PAGINATION_CLASS': 'utils.pagination.StandardResultsSetPagination'
 }
 
@@ -172,7 +174,10 @@ REST_FRAMEWORK = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
-    '*'
+    'http://localhost',
+    'http://localhost:8080',
+    'http://myrove.cn',
+    'http://www.myrove.cn'
 )
 # 设置允许访问的方法
 CORS_ALLOW_METHODS = (
